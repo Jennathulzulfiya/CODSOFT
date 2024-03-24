@@ -1,0 +1,234 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+titanic_data=pd.read_csv('tested.csv')
+len(titanic_data)
+418
+titanic_data.head()
+PassengerId	Survived	Pclass	Name	Sex	Age	SibSp	Parch	Ticket	Fare	Cabin	Embarked
+0	892	0	3	Kelly, Mr. James	male	34.5	0	0	330911	7.8292	NaN	Q
+1	893	1	3	Wilkes, Mrs. James (Ellen Needs)	female	47.0	1	0	363272	7.0000	NaN	S
+2	894	0	2	Myles, Mr. Thomas Francis	male	62.0	0	0	240276	9.6875	NaN	Q
+3	895	0	3	Wirz, Mr. Albert	male	27.0	0	0	315154	8.6625	NaN	S
+4	896	1	3	Hirvonen, Mrs. Alexander (Helga E Lindqvist)	female	22.0	1	1	3101298	12.2875	NaN	S
+titanic_data.index
+RangeIndex(start=0, stop=418, step=1)
+titanic_data.columns
+Index(['PassengerId', 'Survived', 'Pclass', 'Name', 'Sex', 'Age', 'SibSp',
+       'Parch', 'Ticket', 'Fare', 'Cabin', 'Embarked'],
+      dtype='object')
+titanic_data.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 418 entries, 0 to 417
+Data columns (total 12 columns):
+ #   Column       Non-Null Count  Dtype  
+---  ------       --------------  -----  
+ 0   PassengerId  418 non-null    int64  
+ 1   Survived     418 non-null    int64  
+ 2   Pclass       418 non-null    int64  
+ 3   Name         418 non-null    object 
+ 4   Sex          418 non-null    object 
+ 5   Age          332 non-null    float64
+ 6   SibSp        418 non-null    int64  
+ 7   Parch        418 non-null    int64  
+ 8   Ticket       418 non-null    object 
+ 9   Fare         417 non-null    float64
+ 10  Cabin        91 non-null     object 
+ 11  Embarked     418 non-null    object 
+dtypes: float64(2), int64(5), object(5)
+memory usage: 39.3+ KB
+titanic_data.dtypes
+PassengerId      int64
+Survived         int64
+Pclass           int64
+Name            object
+Sex             object
+Age            float64
+SibSp            int64
+Parch            int64
+Ticket          object
+Fare           float64
+Cabin           object
+Embarked        object
+dtype: object
+titanic_data.describe()
+PassengerId	Survived	Pclass	Age	SibSp	Parch	Fare
+count	418.000000	418.000000	418.000000	332.000000	418.000000	418.000000	417.000000
+mean	1100.500000	0.363636	2.265550	30.272590	0.447368	0.392344	35.627188
+std	120.810458	0.481622	0.841838	14.181209	0.896760	0.981429	55.907576
+min	892.000000	0.000000	1.000000	0.170000	0.000000	0.000000	0.000000
+25%	996.250000	0.000000	1.000000	21.000000	0.000000	0.000000	7.895800
+50%	1100.500000	0.000000	3.000000	27.000000	0.000000	0.000000	14.454200
+75%	1204.750000	1.000000	3.000000	39.000000	1.000000	0.000000	31.500000
+max	1309.000000	1.000000	3.000000	76.000000	8.000000	9.000000	512.329200
+sns.countplot(x='Survived',data=titanic_data)
+<Axes: xlabel='Survived', ylabel='count'>
+
+sns.countplot(x='Survived',data=titanic_data,hue='Sex')
+<Axes: xlabel='Survived', ylabel='count'>
+
+titanic_data.isna()
+PassengerId	Survived	Pclass	Name	Sex	Age	SibSp	Parch	Ticket	Fare	Cabin	Embarked
+0	False	False	False	False	False	False	False	False	False	False	True	False
+1	False	False	False	False	False	False	False	False	False	False	True	False
+2	False	False	False	False	False	False	False	False	False	False	True	False
+3	False	False	False	False	False	False	False	False	False	False	True	False
+4	False	False	False	False	False	False	False	False	False	False	True	False
+...	...	...	...	...	...	...	...	...	...	...	...	...
+413	False	False	False	False	False	True	False	False	False	False	True	False
+414	False	False	False	False	False	False	False	False	False	False	False	False
+415	False	False	False	False	False	False	False	False	False	False	True	False
+416	False	False	False	False	False	True	False	False	False	False	True	False
+417	False	False	False	False	False	True	False	False	False	False	True	False
+418 rows × 12 columns
+
+titanic_data.isna().sum()
+PassengerId      0
+Survived         0
+Pclass           0
+Name             0
+Sex              0
+Age             86
+SibSp            0
+Parch            0
+Ticket           0
+Fare             1
+Cabin          327
+Embarked         0
+dtype: int64
+sns.heatmap(titanic_data.isna())
+<Axes: >
+
+(titanic_data['Age'].isna().sum()/len(titanic_data['Age']))*100
+20.574162679425836
+(titanic_data['Cabin'].isna().sum()/len(titanic_data['Cabin']))*100
+78.22966507177034
+sns.displot(x='Age',data=titanic_data)
+C:\Users\Zulfiya\anaconda3\Lib\site-packages\seaborn\axisgrid.py:118: UserWarning: The figure layout has changed to tight
+  self._figure.tight_layout(*args, **kwargs)
+<seaborn.axisgrid.FacetGrid at 0x246a1164610>
+
+titanic_data['Age'].fillna(titanic_data['Age'].mean(),inplace=True)
+titanic_data['Age'].isna().sum()
+0
+sns.heatmap(titanic_data.isna())
+<Axes: >
+
+titanic_data.drop('Cabin',axis=1,inplace=True)
+titanic_data.head()
+PassengerId	Survived	Pclass	Name	Sex	Age	SibSp	Parch	Ticket	Fare	Embarked
+0	892	0	3	Kelly, Mr. James	male	34.5	0	0	330911	7.8292	Q
+1	893	1	3	Wilkes, Mrs. James (Ellen Needs)	female	47.0	1	0	363272	7.0000	S
+2	894	0	2	Myles, Mr. Thomas Francis	male	62.0	0	0	240276	9.6875	Q
+3	895	0	3	Wirz, Mr. Albert	male	27.0	0	0	315154	8.6625	S
+4	896	1	3	Hirvonen, Mrs. Alexander (Helga E Lindqvist)	female	22.0	1	1	3101298	12.2875	S
+titanic_data.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 418 entries, 0 to 417
+Data columns (total 11 columns):
+ #   Column       Non-Null Count  Dtype  
+---  ------       --------------  -----  
+ 0   PassengerId  418 non-null    int64  
+ 1   Survived     418 non-null    int64  
+ 2   Pclass       418 non-null    int64  
+ 3   Name         418 non-null    object 
+ 4   Sex          418 non-null    object 
+ 5   Age          418 non-null    float64
+ 6   SibSp        418 non-null    int64  
+ 7   Parch        418 non-null    int64  
+ 8   Ticket       418 non-null    object 
+ 9   Fare         417 non-null    float64
+ 10  Embarked     418 non-null    object 
+dtypes: float64(2), int64(5), object(4)
+memory usage: 36.1+ KB
+titanic_data.dtypes
+PassengerId      int64
+Survived         int64
+Pclass           int64
+Name            object
+Sex             object
+Age            float64
+SibSp            int64
+Parch            int64
+Ticket          object
+Fare           float64
+Embarked        object
+dtype: object
+gender=pd.get_dummies(titanic_data['Sex'],drop_first=True)
+titanic_data['Gender']=gender
+titanic_data.head()
+PassengerId	Survived	Pclass	Name	Sex	Age	SibSp	Parch	Ticket	Fare	Embarked	Gender
+0	892	0	3	Kelly, Mr. James	male	34.5	0	0	330911	7.8292	Q	True
+1	893	1	3	Wilkes, Mrs. James (Ellen Needs)	female	47.0	1	0	363272	7.0000	S	False
+2	894	0	2	Myles, Mr. Thomas Francis	male	62.0	0	0	240276	9.6875	Q	True
+3	895	0	3	Wirz, Mr. Albert	male	27.0	0	0	315154	8.6625	S	True
+4	896	1	3	Hirvonen, Mrs. Alexander (Helga E Lindqvist)	female	22.0	1	1	3101298	12.2875	S	False
+titanic_data.drop(['Name','Sex','Ticket','Embarked'],axis=1,inplace=True)
+titanic_data.head()
+PassengerId	Survived	Pclass	Age	SibSp	Parch	Fare	Gender
+0	892	0	3	34.5	0	0	7.8292	True
+1	893	1	3	47.0	1	0	7.0000	False
+2	894	0	2	62.0	0	0	9.6875	True
+3	895	0	3	27.0	0	0	8.6625	True
+4	896	1	3	22.0	1	1	12.2875	False
+x=titanic_data[['PassengerId','Pclass','Age','SibSp','Parch','Fare']]
+y=titanic_data['Survived']
+y
+0      0
+1      1
+2      0
+3      0
+4      1
+      ..
+413    0
+414    1
+415    0
+416    0
+417    0
+Name: Survived, Length: 418, dtype: int64
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.33, random_state=42)
+from sklearn.linear_model import LogisticRegression
+lr=LogisticRegression()
+lr.fit(x_train,y_train)
+
+LogisticRegression
+LogisticRegression()
+from sklearn.impute import SimpleImputer
+
+# Create an imputer object with a strategy to fill NaNs (e.g., with mean)
+imputer = SimpleImputer(strategy='mean')
+
+# Fit the imputer on your training data and transform both training and test data
+x_train_imputed = imputer.fit_transform(x_train)
+x_test_imputed = imputer.transform(x_test)
+
+# Now, you can use the imputed data with your logistic regression model
+predict = lr.predict(x_test_imputed)
+
+# Print confusion matrix
+from sklearn.metrics import confusion_matrix
+import pandas as pd
+
+conf_matrix = confusion_matrix(y_test, predict)
+conf_matrix_df = pd.DataFrame(conf_matrix, columns=['Predicted No', 'Predicted Yes'], index=['Actual No', 'Actual Yes'])
+print(conf_matrix_df)
+  
+            Predicted No  Predicted Yes
+Actual No             89              3
+Actual Yes            38              8
+C:\Users\Zulfiya\anaconda3\Lib\site-packages\sklearn\base.py:464: UserWarning: X does not have valid feature names, but LogisticRegression was fitted with feature names
+  warnings.warn(
+from sklearn.metrics import classification_report
+print(classification_report(y_test,predict))
+              precision    recall  f1-score   support
+
+           0       0.70      0.97      0.81        92
+           1       0.73      0.17      0.28        46
+
+    accuracy                           0.70       138
+   macro avg       0.71      0.57      0.55       138
+weighted avg       0.71      0.70      0.64       138
+
+ 
